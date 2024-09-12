@@ -1,0 +1,37 @@
+import sqlite3
+
+def insert_one_row(
+    database_name: str,
+    table_name: str,
+    columns_name: str,
+    values: tuple
+) -> None:
+    """
+    Inserts a row into a specific table in an SQLite database.
+
+    This function constructs and executes an SQL query to insert a new row
+    into the specified table. The query uses placeholders for values, which
+    helps to prevent SQL injection attacks.
+
+    :param database_name: The name of the SQLite database file where the table is located.
+    :param table_name: The name of the table where the new row will be inserted.
+    :param columns_name: The names of the columns in the table, separated by commas.
+    :param values: A tuple containing the values to be inserted into the specified columns.
+
+    :raises sqlite3.OperationalError: If an error occurs during the execution of the SQL query.
+    """
+    
+    conn = sqlite3.connect(database_name)
+    cursor = conn.cursor()
+
+    # Create the SQL query with placeholders
+    placeholders = ', '.join('?' * len(values))
+    query = f"""
+        INSERT INTO {table_name} ({columns_name})
+        VALUES ({placeholders})
+    """
+    
+    cursor.execute(query, values)
+    conn.commit()
+    conn.close()
+    return None
