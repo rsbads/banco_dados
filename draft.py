@@ -32,3 +32,20 @@ query = """
 
 
 pd.read_sql_query(query, conn)
+
+columns_desc = """id_cliente INT PRIMARY KEY ,
+        nome TEXT"""
+
+create_table(
+    database='mydatabase',
+    table_name='cliente',
+    columns_desc = columns_desc
+)
+
+drop_table(
+    database='mydatabase',
+    table_name='cliente'
+)
+cursor.execute("""
+    DROP TABLE cliente
+""")
